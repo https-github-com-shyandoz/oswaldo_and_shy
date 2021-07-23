@@ -49,12 +49,15 @@ function AJAX(url, method = `GET`, data) {
 // will override message and name with what we have
 // //this is to updatae an indiviual movie
 // PATCH METHOD
-AJAX(serverURL + `/9`, `PATCH`, {
-    message: `We are really ready for the weekend!`
-})
-    .then(data => console.log(data))
-
-
+// AJAX(serverURL + `/9`, `PATCH`, {
+//     message: `We are really ready for the weekend!`
+// })
+//     .then(data => console.log(data))
 //
-// AJAX(serverURL)
-// .then(data => console.log(data))
+
+// DELETE Method
+AJAX(serverURL + `/14`, `DELETE`)
+.then(data => console.log(data))
+
+AJAX(serverURL)
+.then(data => console.log(data))
