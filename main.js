@@ -17,6 +17,12 @@ fetch(serverURL).then(response => {
         let plot = $(`#plot`).val();
         let cardsSubmitButton = $(`#card_submit_button`)
 
+        AJAX(serverURL, `POST`, {
+            title: movieTitle
+        })
+            .then((data) => {
+                console.log(data)
+            })
 
         function allTheMovies(movies) {
             for (let i = 0; i < movies.length; i++) {
@@ -70,7 +76,7 @@ fetch(serverURL).then(response => {
                       <label for id="actors">Actors</label>
                       <input type="text" class="form-control" id="actors">
                       <label for id="plot">Plot</label>
-                      <input type="textarea" class="form-control" id="plot">
+                      <textarea type="text" class="form-control" id="plot" width="30px" hight="10px"></textarea>
                       <hr>
                      <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button">Submit</button>
                     </div>
