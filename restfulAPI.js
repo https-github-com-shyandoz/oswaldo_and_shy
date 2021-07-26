@@ -1,4 +1,4 @@
-const serverURL = `https://tinted-quixotic-tractor.glitch.me/movies`
+
 
 // this is a simple get request
 
