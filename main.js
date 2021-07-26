@@ -17,6 +17,21 @@ fetch(serverURL).then(response => {
         let plot = $(`#plot`).val();
         let cardsSubmitButton = $(`#card_submit_button`)
 
+        function AJAX(url, method = `GET`, data) {
+            const options = {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json', //all API's use this for codeup
+                },
+                body: JSON.stringify(data),
+            };
+
+            return  fetch(url, options)
+                .then(res => res.json())
+                .then(responseData => console.log(responseData))
+        }
+
+
         AJAX(serverURL, `POST`, {
             title: movieTitle
         })
