@@ -56,7 +56,7 @@ function AJAX(url, method = `GET`, data) {
 //
 
 // DELETE Method
-AJAX(serverURL + `/14`, `DELETE`)
+AJAX(serverURL + `${this}`, `DELETE`)
 .then(data => console.log(data))
 
 AJAX(serverURL)
