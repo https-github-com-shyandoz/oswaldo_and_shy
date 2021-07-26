@@ -22,19 +22,19 @@
 
 // basically jquery ajax request
 
-function AJAX(url, method = `GET`, data) {
-    const options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json', //all API's use this for codeup
-        },
-        body: JSON.stringify(data),
-    };
-
-  return  fetch(url, options)
-        .then(res => res.json())
-        .then(responseData => console.log(responseData))
-}
+// function AJAX(url, method = `GET`, data) {
+//     const options = {
+//         method: method,
+//         headers: {
+//             'Content-Type': 'application/json', //all API's use this for codeup
+//         },
+//         body: JSON.stringify(data),
+//     };
+//
+//   return  fetch(url, options)
+//         .then(res => res.json())
+//         .then(responseData => console.log(responseData))
+// }
 
 // AJAX(serverURL, `POST`, {title: `We built our own ajax function`})
 // .then((data) => {
@@ -56,8 +56,8 @@ function AJAX(url, method = `GET`, data) {
 //
 
 // DELETE Method
-AJAX(serverURL + `${this}`, `DELETE`)
-.then(data => console.log(data))
-
-AJAX(serverURL)
-.then(data => console.log(data))
+// AJAX(serverURL + `/${this.id}, `DELETE`)
+// .then(data => console.log(data))
+//
+// AJAX(serverURL)
+// .then(data => console.log(data))

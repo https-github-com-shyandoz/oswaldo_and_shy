@@ -2,71 +2,62 @@
 
 const serverURL = `https://tinted-quixotic-tractor.glitch.me/movies`
 let cardsSubmitButton = $(`#card_submit_button`)
+let movieFilter = '';
 
-function addMovie(){
-    let movieTitle = $(`#movie_title`).val();
-    let directorName = $(`#director_name`).val();
-    let rating = $(`#rating`).val();
-    let year = $(`#year`).val();
-    let genre = $(`#genre`).val();
-    let actors = $(`#actors`).val();
-    let plot = $(`#plot`).val();
+let directorName = $(`#director_name`).val();
+let rating = $(`#rating`).val();
+let year = $(`#year`).val();
+let genre = $(`#genre`).val();
+let actors = $(`#actors`).val();
+let plot = $(`#plot`).val();
 
-    AJAX(serverURL, `POST`, {
-        movieTitle,
-        directorName,
-        rating,
-        year,
-        genre,
-        actors,
-        plot
-    })
-        .then((data) => {
-            console.log(data)
+function deleteMovie(id) {
+    console.log(id); // calls specific ID
+    AJAX(serverURL + `/${id}` , `DELETE`)
+        .then((response) => {
+            fetch(serverURL).then(response => {
+                response.json().then(movies => {
+                    console.log(movies)
+                    allTheMovies(movies);
+                })
+            })
         })
-
-
 }
 
+function allTheMovies(movies) {
+    movieFilter = `
+        <div id="add_button" class="card bg-light mb-3" style="max-width: 18rem;">
+              <div class="card-header">Add Movie</div>
+              <div class="card-body">
+               <form>
+                  <div class="form-row">
+                    <div class="col">
+                      <label>Title</label>
+                      <input type="text" class="form-control" id="movie_title">
+                      <label>Director Name</label>
+                      <input type="text" class="form-control" id="director_name">
+                      <label>Rating</label>
+                      <input type="text" class="form-control" id="rating">
+                      <label>Year</label>
+                      <input type="text" class="form-control" id="year">
+                      <label>Genre</label>
+                      <input type="text" class="form-control" id="genre">
+                      <label>Actors</label>
+                      <input type="text" class="form-control" id="actors">
+                      <label>Plot</label>
+                      <textarea type="text" class="form-control" id="plot" width="30px" hight="10px"></textarea>
+                      <hr>
+                     <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button">Add New Movie</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+        `
+    for (let i = 0; i < movies.length; i++) {
 
-function AJAX(url, method = `GET`, data) {
-    const options = {
-        method: method,
-        headers: {
-            'Content-Type': 'application/json', //all API's use this for codeup
-        },
-        body: JSON.stringify(data),
-    };
-
-    return  fetch(url, options)
-        .then(res => res.json())
-        .then(responseData => console.log(responseData))
-}
-
-fetch(serverURL).then(response => {
-    response.json().then(movies => {
-        console.log(movies)
-
-        let movieFilter = '';
-        let movieTitle = $(`#movie_title`).val();
-        let directorName = $(`#director_name`).val();
-        let rating = $(`#rating`).val();
-        let year = $(`#year`).val();
-        let genre = $(`#genre`).val();
-        let actors = $(`#actors`).val();
-        let plot = $(`#plot`).val();
-
-
-
-
-
-
-
-        function allTheMovies(movies) {
-            for (let i = 0; i < movies.length; i++) {
-
-                movieFilter +=
-                    `
+        movieFilter +=
+            `
                     <div class="container-fluid">
                         <div class="card-colums">
                           <div class="col-4 display-flex">
@@ -82,7 +73,7 @@ fetch(serverURL).then(response => {
                                 <p class="card-text">Plot: ${movies[i].plot}</p>
                                 <div>
                                 <button id="edit" type="button" class="btn btn-light">Edit</button>
-                                <button id="delete" type="button" class="btn btn-light">Delete</button>
+                                <button id="delete" type="button" class="btn btn-light" onclick="deleteMovie(${movies[i].id})">Delete</button>
                                 </div>
                               </div>
                             </div>
@@ -90,49 +81,83 @@ fetch(serverURL).then(response => {
                         </div>
                     </div>
 `
-            }
-            $(`#movie_body`).html(movieFilter)
-            $(`#card_submit_button`).click(()=>{
-                addMovie()
-                console.log('help')
+    }
+    $(`#movie_body`).html(movieFilter) // after this, delete buttons are capable of doing things
+    $(`#card_submit_button`).click(() => {
+        addMovie();
+        // refresh the movies var, asychronus call(set up as promise) ajax(url,get).then{update and pass }
+
+
+
+
+        console.log('Done')
+    })
+}
+
+function addMovie() {
+    let movieTitle = $(`#movie_title`).val();
+    directorName = $(`#director_name`).val();
+    rating = $(`#rating`).val();
+    year = $(`#year`).val();
+    genre = $(`#genre`).val();
+    actors = $(`#actors`).val();
+    plot = $(`#plot`).val();
+
+
+
+    AJAX(serverURL, `POST`, {
+        title: movieTitle,
+        director: directorName,
+        rating: rating,
+        year: year,
+        genre: genre,
+        actors: actors,
+        plot: plot
+    })
+        .then((data) => {
+            // console.log(data)
+            fetch(serverURL).then(response => {
+                response.json().then(movies => {
+                    console.log(movies)
+                    allTheMovies(movies);
+                })
             })
-        }
-        movieFilter += `
-        <div id="add_button" class="card bg-light mb-3" style="max-width: 18rem;">
-              <div class="card-header">Add Movie</div>
-              <div class="card-body">
-               <form>
-                  <div class="form-row">
-                    <div class="col">
-                      <label for id="move_title">Title</label>
-                      <input type="text" class="form-control" id="movie_title">
-                      <label for id="director_name">Director Name</label>
-                      <input type="text" class="form-control" id="director_name">
-                      <label for id="rating">Rating</label>
-                      <input type="text" class="form-control" id="rating">
-                      <label for id="year">Year</label>
-                      <input type="text" class="form-control" id="year">
-                      <label for id="genre">Genre</label>
-                      <input type="text" class="form-control" id="genre">
-                      <label for id="actors">Actors</label>
-                      <input type="text" class="form-control" id="actors">
-                      <label for id="plot">Plot</label>
-                      <textarea type="text" class="form-control" id="plot" width="30px" hight="10px"></textarea>
-                      <hr>
-                     <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button">Submit</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-        `
+        })
+
+
+}
+
+
+function AJAX(url, method = `GET`, data) {
+    const options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json', //all API's use this for codeup
+        },
+        body: JSON.stringify(data),
+    };
+
+    return fetch(url, options)
+        .then(res => res.json())
+        .then(responseData => console.log(responseData))
+}
+
+fetch(serverURL).then(response => {
+    response.json().then(movies => {
+        console.log(movies)
+
+
+        let movieTitle = $(`#movie_title`).val();
+        let directorName = $(`#director_name`).val();
+        let rating = $(`#rating`).val();
+        let year = $(`#year`).val();
+        let genre = $(`#genre`).val();
+        let actors = $(`#actors`).val();
+        let plot = $(`#plot`).val();
+
         allTheMovies(movies);
     }) // end of .then
 
 
-
-
-    // AJAX(serverURL + `${this}`, `DELETE`)
-    //     .then(data => console.log(data))
 })
 
