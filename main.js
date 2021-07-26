@@ -1,7 +1,47 @@
 `use strict`
 
 const serverURL = `https://tinted-quixotic-tractor.glitch.me/movies`
+let cardsSubmitButton = $(`#card_submit_button`)
 
+function addMovie(){
+    let movieTitle = $(`#movie_title`).val();
+    let directorName = $(`#director_name`).val();
+    let rating = $(`#rating`).val();
+    let year = $(`#year`).val();
+    let genre = $(`#genre`).val();
+    let actors = $(`#actors`).val();
+    let plot = $(`#plot`).val();
+
+    AJAX(serverURL, `POST`, {
+        movieTitle,
+        directorName,
+        rating,
+        year,
+        genre,
+        actors,
+        plot
+    })
+        .then((data) => {
+            console.log(data)
+        })
+
+
+}
+
+
+function AJAX(url, method = `GET`, data) {
+    const options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json', //all API's use this for codeup
+        },
+        body: JSON.stringify(data),
+    };
+
+    return  fetch(url, options)
+        .then(res => res.json())
+        .then(responseData => console.log(responseData))
+}
 
 fetch(serverURL).then(response => {
     response.json().then(movies => {
@@ -15,29 +55,12 @@ fetch(serverURL).then(response => {
         let genre = $(`#genre`).val();
         let actors = $(`#actors`).val();
         let plot = $(`#plot`).val();
-        let cardsSubmitButton = $(`#card_submit_button`)
-
-        function AJAX(url, method = `GET`, data) {
-            const options = {
-                method: method,
-                headers: {
-                    'Content-Type': 'application/json', //all API's use this for codeup
-                },
-                body: JSON.stringify(data),
-            };
-
-            return  fetch(url, options)
-                .then(res => res.json())
-                .then(responseData => console.log(responseData))
-        }
 
 
-        AJAX(serverURL, `POST`, {
-            title: movieTitle
-        })
-            .then((data) => {
-                console.log(data)
-            })
+
+
+
+
 
         function allTheMovies(movies) {
             for (let i = 0; i < movies.length; i++) {
@@ -69,7 +92,10 @@ fetch(serverURL).then(response => {
 `
             }
             $(`#movie_body`).html(movieFilter)
-
+            $(`#card_submit_button`).click(()=>{
+                addMovie()
+                console.log('help')
+            })
         }
         movieFilter += `
         <div id="add_button" class="card bg-light mb-3" style="max-width: 18rem;">
