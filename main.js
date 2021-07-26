@@ -16,8 +16,8 @@ fetch(serverURL).then(response => {
                 movieFilter +=
                     `
                     <div class="container-fluid">
-                        <div class="row row-cols-1 row-cols-md-2">
-                          <div class="col mb-4">
+                        <div class="card-colums">
+                          <div class="col-4 display-flex">
                             <div class="card">
                               <img src="${movies[i].poster}" class="card-img-top" alt="movie_poster">
                               <div class="card-body">
