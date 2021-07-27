@@ -11,9 +11,12 @@ let genre = $(`#genre`).val();
 let actors = $(`#actors`).val();
 let plot = $(`#plot`).val();
 
+let localMovies;
+
+
 function deleteMovie(id) {
     console.log(id); // calls specific ID
-    AJAX(serverURL + `/${id}` , `DELETE`)
+    AJAX(serverURL + `/${id}`, `DELETE`)
         .then((response) => {
             fetch(serverURL).then(response => {
                 response.json().then(movies => {
@@ -24,50 +27,62 @@ function deleteMovie(id) {
         })
 }
 
-function editMovie(id) {
+function editMovie(id, data) {
     console.log(id); // calls specific ID
-    AJAX(serverURL + `/${id}` , `PUT`)
-        .then((response) => {
-            fetch(serverURL).then(response => {
-                response.json().then(movies => {
-                    console.log(movies)
-                    allTheMovies(movies);
-                })
-            })
+    AJAX(serverURL + `/${id}`, `PUT`, data)
+        .then(movies => {
+            console.log(movies)
+            updateMovies();
         })
 }
 
 
-$(document).on('click', '.edit_button', function() {
+$(document).on('click', '.edit_button', function () {
     // console.log(`Hey Girl`)
-    console.log($(this).attr('data-id'));
+    const movieToEditId = $(this).attr('data-id');
+    const movieObject = localMovies.filter(movie => movie.id == movieToEditId)[0]; // gets movie object
     let editHTML = `<form>
                       <div class="form-row">
                         <div class="col">
                           <label>Title</label>
-                          <input type="text" class="form-control" id="movie_title">
+                          <input type="text" class="form-control" value="${movieObject.title}" id="movie_title${movieToEditId}">
                           <label>Director Name</label>
-                          <input type="text" class="form-control" id="director_name">
+                          <input type="text" class="form-control" value="${movieObject.director}" id="director_name${movieToEditId}">
                           <label>Rating</label>
-                          <input type="text" class="form-control" id="rating">
+                          <input type="text" class="form-control" value="${movieObject.rating}" id="rating${movieToEditId}">
                           <label>Year</label>
-                          <input type="text" class="form-control" id="year">
+                          <input type="text" class="form-control" value="${movieObject.year}" id="year${movieToEditId}">
                           <label>Genre</label>
-                          <input type="text" class="form-control" id="genre">
+                          <input type="text" class="form-control" value="${movieObject.genre}" id="genre${movieToEditId}">
                           <label>Actors</label>
-                          <input type="text" class="form-control" id="actors">
+                          <input type="text" class="form-control" value="${movieObject.actors}" id="actors${movieToEditId}">
                           <label>Plot</label>
-                          <textarea type="text" class="form-control" id="plot" width="30px" hight="10px"></textarea>
+                          <textarea type="text" class="form-control" id="plot${movieToEditId}" width="30px" hight="10px">${movieObject.plot}</textarea>
                           <hr>
-                         <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button">Add New Movie</button>
+                         <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button${movieToEditId}">Update Movie</button>
                         </div>
                       </div>
                     </form>`
     $(this).parent().parent().html(editHTML);
+    $(`#card_submit_button${movieToEditId}`).click((e) => {
+        e.preventDefault();
+        const updatedMovieObject = {
+            title: $(`#movie_title${movieToEditId}`).val(),
+            director: $(`#director_name${movieToEditId}`).val(),
+            rating: $(`#rating${movieToEditId}`).val(),
+            year: $(`#year${movieToEditId}`).val(),
+            genre: $(`#genre${movieToEditId}`).val(),
+            actors: $(`#actors${movieToEditId}`).val(),
+            plot: $(`#plot${movieToEditId}`).val()
+
+        }
+    editMovie(movieToEditId, updatedMovieObject);
+    })
 });
 
+function addYourMovie(movies) {
 
-
+}
 
 function allTheMovies(movies) {
     movieFilter = `
@@ -103,10 +118,10 @@ function allTheMovies(movies) {
 
         movieFilter +=
             `
-                    <div class="container-fluid">
-                        <div class="card-colums">
-                          <div class="col-4 display-flex">
-                            <div class="card">
+                    
+                        
+                         
+                            <div class="card col-4">
                               <img src="${movies[i].poster}" class="card-img-top" alt="movie_poster">
                               <div class="card-body">
                                 <h5 class="card-title">Title: ${movies[i].title}</h5>
@@ -122,9 +137,9 @@ function allTheMovies(movies) {
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </div>
-                    </div>
+                        
+                        
+                    
 `
     }
     $(`#movie_body`).html(movieFilter) // after this, delete buttons are capable of doing things
@@ -133,12 +148,9 @@ function allTheMovies(movies) {
         // refresh the movies var, asychronus call(set up as promise) ajax(url,get).then{update and pass }
 
 
-
-
         console.log('Done')
     })
 }
-
 
 
 // assaign a class with jquery addClass or attribute, give it `contenteditable="true"`
@@ -150,7 +162,6 @@ function addMovie() {
     genre = $(`#genre`).val();
     actors = $(`#actors`).val();
     plot = $(`#plot`).val();
-
 
 
     AJAX(serverURL, `POST`, {
@@ -190,23 +201,26 @@ function AJAX(url, method = `GET`, data) {
         .then(responseData => console.log(responseData))
 }
 
-fetch(serverURL).then(response => {
-    response.json().then(movies => {
-        console.log(movies)
+function updateMovies() {
+    fetch(serverURL).then(response => {
+        response.json().then(movies => {
+            console.log(movies)
+            localMovies = movies;
 
 
-        let movieTitle = $(`#movie_title`).val();
-        let directorName = $(`#director_name`).val();
-        let rating = $(`#rating`).val();
-        let year = $(`#year`).val();
-        let genre = $(`#genre`).val();
-        let actors = $(`#actors`).val();
-        let plot = $(`#plot`).val();
+            let movieTitle = $(`#movie_title`).val();
+            let directorName = $(`#director_name`).val();
+            let rating = $(`#rating`).val();
+            let year = $(`#year`).val();
+            let genre = $(`#genre`).val();
+            let actors = $(`#actors`).val();
+            let plot = $(`#plot`).val();
 
-        allTheMovies(movies);
-    }) // end of .then
-
-
-})
+            allTheMovies(movies);
+        }) // end of .then
 
 
+    })
+
+}
+updateMovies();
