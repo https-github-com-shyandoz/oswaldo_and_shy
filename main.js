@@ -3,7 +3,7 @@
 const serverURL = `https://tinted-quixotic-tractor.glitch.me/movies`
 let cardsSubmitButton = $(`#card_submit_button`)
 let movieFilter = '';
-
+let poster = $(`#poster_url`).val();
 let directorName = $(`#director_name`).val();
 let rating = $(`#rating`).val();
 let year = $(`#year`).val();
@@ -44,6 +44,8 @@ $(document).on('click', '.edit_button', function () {
     let editHTML = `<form>
                       <div class="form-row">
                         <div class="col">
+                          <label>Poster URL</label>
+                          <input type="text" class="form-control" id="poster_url${movieToEditId}" value="${movieObject.poster}">
                           <label>Title</label>
                           <input type="text" class="form-control" value="${movieObject.title}" id="movie_title${movieToEditId}">
                           <label>Director Name</label>
@@ -67,6 +69,7 @@ $(document).on('click', '.edit_button', function () {
     $(`#card_submit_button${movieToEditId}`).click((e) => {
         e.preventDefault();
         const updatedMovieObject = {
+            poster: $(`#poster_url${movieToEditId}`).val(),
             title: $(`#movie_title${movieToEditId}`).val(),
             director: $(`#director_name${movieToEditId}`).val(),
             rating: $(`#rating${movieToEditId}`).val(),
@@ -93,6 +96,8 @@ function allTheMovies(movies) {
                <form>
                   <div class="form-row">
                     <div class="col">
+                      <label>Poster URL</label>
+                      <input type="text" class="form-control" id="poster_url">
                       <label>Title</label>
                       <input type="text" class="form-control" id="movie_title">
                       <label>Director Name</label>
@@ -158,6 +163,7 @@ function allTheMovies(movies) {
 // assaign a class with jquery addClass or attribute, give it `contenteditable="true"`
 function addMovie() {
     let movieTitle = $(`#movie_title`).val();
+    poster = $(`#poster_url`).val();
     directorName = $(`#director_name`).val();
     rating = $(`#rating`).val();
     year = $(`#year`).val();
@@ -167,6 +173,7 @@ function addMovie() {
 
 
     AJAX(serverURL, `POST`, {
+        poster: poster,
         title: movieTitle,
         director: directorName,
         rating: rating,
@@ -210,6 +217,7 @@ function updateMovies() {
             localMovies = movies;
 
 
+            let poster = $(`#poster_url`).val;
             let movieTitle = $(`#movie_title`).val();
             let directorName = $(`#director_name`).val();
             let rating = $(`#rating`).val();
