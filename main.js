@@ -24,6 +24,51 @@ function deleteMovie(id) {
         })
 }
 
+function editMovie(id) {
+    console.log(id); // calls specific ID
+    AJAX(serverURL + `/${id}` , `PUT`)
+        .then((response) => {
+            fetch(serverURL).then(response => {
+                response.json().then(movies => {
+                    console.log(movies)
+                    allTheMovies(movies);
+                })
+            })
+        })
+}
+
+
+$(document).on('click', '.edit_button', function() {
+    // console.log(`Hey Girl`)
+    console.log($(this).attr('data-id'));
+    let editHTML = `<form>
+                      <div class="form-row">
+                        <div class="col">
+                          <label>Title</label>
+                          <input type="text" class="form-control" id="movie_title">
+                          <label>Director Name</label>
+                          <input type="text" class="form-control" id="director_name">
+                          <label>Rating</label>
+                          <input type="text" class="form-control" id="rating">
+                          <label>Year</label>
+                          <input type="text" class="form-control" id="year">
+                          <label>Genre</label>
+                          <input type="text" class="form-control" id="genre">
+                          <label>Actors</label>
+                          <input type="text" class="form-control" id="actors">
+                          <label>Plot</label>
+                          <textarea type="text" class="form-control" id="plot" width="30px" hight="10px"></textarea>
+                          <hr>
+                         <button type="button" class="btn btn-secondary btn-lg btn-block" id="card_submit_button">Add New Movie</button>
+                        </div>
+                      </div>
+                    </form>`
+    $(this).parent().parent().html(editHTML);
+});
+
+
+
+
 function allTheMovies(movies) {
     movieFilter = `
         <div id="add_button" class="card bg-light mb-3" style="max-width: 18rem;">
@@ -72,7 +117,7 @@ function allTheMovies(movies) {
                                 <p class="card-text">Actors: ${movies[i].actors}</p>
                                 <p class="card-text">Plot: ${movies[i].plot}</p>
                                 <div>
-                                <button id="edit" type="button" class="btn btn-light">Edit</button>
+                                <button id="edit" type="button" class="btn btn-light edit_button" data-id = ${movies[i].id}>Edit</button>
                                 <button id="delete" type="button" class="btn btn-light" onclick="deleteMovie(${movies[i].id})">Delete</button>
                                 </div>
                               </div>
@@ -94,6 +139,9 @@ function allTheMovies(movies) {
     })
 }
 
+
+
+// assaign a class with jquery addClass or attribute, give it `contenteditable="true"`
 function addMovie() {
     let movieTitle = $(`#movie_title`).val();
     directorName = $(`#director_name`).val();
@@ -160,4 +208,5 @@ fetch(serverURL).then(response => {
 
 
 })
+
 
