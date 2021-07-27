@@ -86,7 +86,8 @@ function addYourMovie(movies) {
 
 function allTheMovies(movies) {
     movieFilter = `
-        <div id="add_button" class="card bg-light mb-3" style="max-width: 18rem;">
+    <div class="container">
+        <div id="add_button" class="card bg-light mb-3  " style="max-width: 18rem;">
               <div class="card-header">Add Movie</div>
               <div class="card-body">
                <form>
@@ -113,7 +114,8 @@ function allTheMovies(movies) {
                 </form>
               </div>
             </div>
-        `
+    </div>    
+`
     for (let i = 0; i < movies.length; i++) {
 
         movieFilter +=
