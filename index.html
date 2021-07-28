@@ -12,6 +12,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
           integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
 <style>
     .col-4 > p  {
         display: flex;
@@ -52,9 +53,15 @@
 }
 
 </style>
+
+<script>
+
+    $(window).on("load,",function(){
+        $(".bg").fadeOut("slow");
+    });
+</script>
 </head>
 <body>
-
 
 <div class="header">
     <h1>Movies a Go Go!</h1>
