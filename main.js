@@ -27,6 +27,8 @@ function deleteMovie(id) {
         })
 }
 
+
+
 function editMovie(id, data) {
     console.log(id); // calls specific ID
     AJAX(serverURL + `/${id}`, `PUT`, data)
